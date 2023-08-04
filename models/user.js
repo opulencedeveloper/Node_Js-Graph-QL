@@ -21,7 +21,6 @@ const userSchema = new Schema({
   posts: [
     {
       type: Schema.Types.ObjectId,
-      //see the classic node server to know what ref means
       ref: "Post",
     },
   ],

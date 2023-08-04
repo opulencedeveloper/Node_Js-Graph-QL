@@ -18,12 +18,10 @@ const postSchema = new Schema(
     },
     creator: {
       type: Schema.Types.ObjectId,
-      //see the class node server to know what ref means
       ref: 'User',
       required: true,
     },
   },
-  //adding this will give you a 'createdAt'and 'updatedAt' timeStamps in this collection
   { timestamps: true }
 );
 

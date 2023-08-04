@@ -2,27 +2,21 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// see the classic-node-js-server-code-to-know-how-this-works
-//this package is for user-input-validation
+
 const { validationResult } = require("express-validator");
 
 exports.signup = (req, res, next) => {
-  // validationResult() => see the classic-node-js-server-code-to-know-how-this-works
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed, entered data is incorrect.");
-    //we are creating this value 'statusCode' on the error object on the fly here same iwth error.data
     error.statusCode = 422;
     error.data = errors.array();
-    ///we used 'throw error', since this code is not async, which ends up in the catch block
-    //where it is handled if it was async, use next(error)
     throw error;
   }
   const email = req.body.email;
   const name = req.body.name;
   const password = req.body.password;
-  // see the classic-node-js-server-code-to-know-how-this-works
   bcrypt
     .hash(password, 12)
     .then((hashedPw) => {
@@ -38,10 +32,8 @@ exports.signup = (req, res, next) => {
     })
     .catch((err) => {
       if (!err.statusCode) {
-        //we are creating this value 'statusCode' on the error object on the fly here
         err.statusCode = 500;
       }
-      //this error will be handled by the error handling middleware in the app.js file
       next(err);
     });
 };
@@ -54,10 +46,7 @@ exports.login = (req, res, next) => {
     .then((user) => {
       if (!user) {
         const error = new Error("A user with this email could not be found.");
-        //we are creating this value 'statusCode' on the error object on the fly here
         error.statusCode = 401;
-        //we use 'throw error', since this code is not async, which ends up in the catch block
-        //where it is handled if it was async, use next(error)
         throw error;
       }
       loadedUser = user;
@@ -66,15 +55,10 @@ exports.login = (req, res, next) => {
     .then((isEqual) => {
       if (!isEqual) {
         const error = new Error("Wrong password");
-        //we are creating this value 'statusCode' on the error object on the fly here
         err.statusCode = 401;
-        //we use 'throw error', since this code is not async, which ends up in the catch block
-        //where it is handled if it was async, use next(error)
         throw error;
       }
 
-      //storing userData on the token object
-      //'somesupersupersecret': this is user a longer string, in other to make the token generation stronger
       const token = jwt.sign(
         {
           email: loadedUser.email,
@@ -89,10 +73,8 @@ exports.login = (req, res, next) => {
     })
     .catch((err) => {
       if (!err.statusCode) {
-        //we are creating this value 'statusCode' on the error object on the fly here
         err.statusCode = 500;
       }
-      //this error will be handled by the error handling middleware in the app.js file
       next(err);
     });
 };

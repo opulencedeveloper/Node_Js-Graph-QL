@@ -1,13 +1,5 @@
 const { buildSchema } = require("graphql");
 
-//type => is the Data type
-//'!' means required,
-//schema: defines the type of action, mutation means creating, deleting, or editing data
-//Note that. 'UserInputData', RootMutation, userInput, createUser() can be any names,
-//':' is the type of data you are returning
-//'ID', type, schema, mutation is coming from grqaphql
-//createUser(userInput: UserInputData): User!, means that 'createUser(userInput: UserInputData)' is of
-//type User, which means it will return a user, this is the data the makes a request to createUser()
 module.exports = buildSchema(`
     type Post {
         _id: ID!
@@ -72,10 +64,3 @@ module.exports = buildSchema(`
 `);
 
 
-
-//schema => must be here, becuase ot holds the basic crud operation here.
-//'query', for reading data actions...
-//'mutation' to create, delete, edit data actions...
-// and 'subscription' which was not used here, because it's for web socket
-//the query key only holds query actions, like getting data
-//mutation key holds mutation, like create, delete, edit actions
